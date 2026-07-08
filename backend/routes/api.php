@@ -1,9 +1,10 @@
 <?php
-
+use App\Http\Controllers\Api\Admin\AssignmentController;
 use App\Http\Controllers\Api\Admin\CategoryController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\AssetController;
+use App\Http\Controllers\Api\Admin\UserController;
 
 // Public route — no auth required to log in
 Route::post('/login', [AuthController::class, 'login']);
@@ -12,13 +13,16 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+   Route::post('assignments/{assignment}/acknowledge', [AssignmentController::class, 'acknowledge']);
 });
 
 // Admin-only routes — restricted to Super Admin and Inventory Manager
 Route::middleware(['auth:sanctum', 'role:super-admin,inventory-manager'])
     ->prefix('admin')
     ->group(function () {
-        Route::apiResource('categories', CategoryController::class);
-    });
-    Route::apiResource('assets', AssetController::class);
-Route::get('assets-summary', [AssetController::class, 'summary']);
+    Route::apiResource('categories', CategoryController::class);});
+    Route::get('users', [UserController::class, 'index']);
+   Route::apiResource('assignments', AssignmentController::class)->only(['index', 'store']);
+   Route::post('assignments/{assignment}/return', [AssignmentController::class, 'returnAsset']);
+   Route::apiResource('assets', AssetController::class);
+   Route::get('assets-summary', [AssetController::class, 'summary']);

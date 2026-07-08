@@ -84,4 +84,9 @@ class Asset extends Model
     {
         return $query->where('status', 'scrapped');
     }
+
+    public function assignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this->hasMany(AssetAssignment::class);
+}
 }

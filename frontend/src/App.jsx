@@ -3,6 +3,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import AssetsListPage from './pages/assets/AssetsListPage';
+import CategoriesListPage from './pages/categories/CategoriesListPage';
 
 // Wraps LoginPage so it can update AuthContext and redirect on success.
 function LoginRoute() {
@@ -21,6 +23,15 @@ function LoginRoute() {
   );
 }
 
+
+<Route
+  path="/categories"
+  element={
+    <ProtectedRoute>
+      <CategoriesListPage />
+    </ProtectedRoute>
+  }
+/>
 function AppRoutes() {
   return (
     <Routes>
@@ -30,6 +41,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/assets"
+        element={
+          <ProtectedRoute>
+            <AssetsListPage />
           </ProtectedRoute>
         }
       />
