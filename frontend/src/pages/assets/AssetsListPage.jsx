@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Sidebar from '../../components/layout/Sidebar';
 import { fetchAssets, fetchCategories, deleteAsset } from '../../api/endpoints/assets';
 import AssetFormModal from './AssetFormModal';
+import AssignmentModal from './AssignmentModal';
 
 const STATUS_STYLES = {
   available: 'bg-[#E7F3EC] text-[#2F7A54]',
@@ -28,8 +29,10 @@ export default function AssetsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Modal state: null = closed, {} = create mode, {...asset} = edit mode
+  // Modal state: undefined = closed, null = create mode, {...asset} = edit mode
   const [modalAsset, setModalAsset] = useState(undefined);
+  // Separate state for the assignment modal — holds the asset being assigned, or null when closed
+  const [assigningAsset, setAssigningAsset] = useState(null);
 
   const loadAssets = useCallback(async () => {
     setIsLoading(true);
@@ -62,6 +65,11 @@ export default function AssetsListPage() {
   function handleSaved() {
     setModalAsset(undefined);
     loadAssets();
+  }
+
+  function handleAssigned() {
+    setAssigningAsset(null);
+    loadAssets(); // asset status flips to "assigned" on the backend, refresh to reflect it
   }
 
   async function handleDelete(asset) {
@@ -162,7 +170,15 @@ export default function AssetsListPage() {
                       <td className="px-5 py-3 text-[#5B6472]">{asset.category?.name}</td>
                       <td className="px-5 py-3 font-mono text-[#5B6472]">{asset.serial_number}</td>
                       <td className="px-5 py-3"><StatusBadge status={asset.status} /></td>
-                      <td className="px-5 py-3 text-right space-x-3">
+                      <td className="px-5 py-3 text-right space-x-3 whitespace-nowrap">
+                        {asset.status === 'available' && (
+                          <button
+                            onClick={() => setAssigningAsset(asset)}
+                            className="text-[#2F7A54] hover:underline text-sm"
+                          >
+                            Assign
+                          </button>
+                        )}
                         <button
                           onClick={() => setModalAsset(asset)}
                           className="text-[#3457A6] hover:underline text-sm"
@@ -191,6 +207,14 @@ export default function AssetsListPage() {
           categories={categories}
           onClose={() => setModalAsset(undefined)}
           onSaved={handleSaved}
+        />
+      )}
+
+      {assigningAsset && (
+        <AssignmentModal
+          asset={assigningAsset}
+          onClose={() => setAssigningAsset(null)}
+          onSaved={handleAssigned}
         />
       )}
     </div>

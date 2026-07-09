@@ -5,8 +5,11 @@ import LoginPage from './pages/auth/LoginPage';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import AssetsListPage from './pages/assets/AssetsListPage';
 import CategoriesListPage from './pages/categories/CategoriesListPage';
+import MyRequestsPage from './pages/requests/MyRequestsPage';
+import ManageRequestsPage from './pages/requests/ManageRequestsPage';
+import DamageReportsPage from './pages/damage-reports/DamageReportsPage';
 
-// Wraps LoginPage so it can update AuthContext and redirect on success.
+
 function LoginRoute() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -23,15 +26,6 @@ function LoginRoute() {
   );
 }
 
-
-<Route
-  path="/categories"
-  element={
-    <ProtectedRoute>
-      <CategoriesListPage />
-    </ProtectedRoute>
-  }
-/>
 function AppRoutes() {
   return (
     <Routes>
@@ -52,6 +46,38 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/categories"
+        element={
+          <ProtectedRoute>
+            <CategoriesListPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-requests"
+        element={
+          <ProtectedRoute>
+            <MyRequestsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/requests"
+        element={
+          <ProtectedRoute>
+            <ManageRequestsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+  path="/damage-reports"
+  element={
+    <ProtectedRoute>
+      <DamageReportsPage />
+    </ProtectedRoute>
+  }
+/>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
