@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\DamageReportController;
 use App\Http\Controllers\Api\Admin\DepreciationController;
 use App\Http\Controllers\Api\Admin\ReportController;
+use App\Http\Controllers\Api\Admin\RoleController;
+use App\Http\Controllers\Api\Admin\AuditLogController;
 
  
 // Public route — no auth required to log in
@@ -31,6 +33,13 @@ use App\Http\Controllers\Api\Admin\ReportController;
     ->prefix('admin')
     ->group(function () {
     Route::apiResource('categories', CategoryController::class);});
+    Route::get('roles', [RoleController::class, 'index']);
+    Route::middleware(['auth:sanctum', 'role:super-admin'])->group(function () {
+    Route::get('audit-logs', [AuditLogController::class, 'index']);
+});
+    Route::apiResource('users', UserController::class)->except(['destroy']); 
+    Route::post('users/{user}/deactivate', [UserController::class, 'deactivate']);
+    Route::post('users/{user}/reactivate', [UserController::class, 'reactivate']);
     Route::get('users', [UserController::class, 'index']);
     Route::middleware(['auth:sanctum', 'permission:approve-requests'])->group(function () {
     Route::post('requests/{requisition}/approve', [RequestController::class, 'approve']);

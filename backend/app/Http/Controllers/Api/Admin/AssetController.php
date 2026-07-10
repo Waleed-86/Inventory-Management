@@ -45,6 +45,7 @@ class AssetController extends Controller
     public function store(AssetRequest $request): JsonResponse
     {
         $asset = Asset::create($request->validated());
+        app(\App\Services\AuditService::class)->log('asset.created', $asset);
 
         return response()->json($asset->load('category'), 201);
     }
@@ -63,7 +64,7 @@ class AssetController extends Controller
     public function update(AssetRequest $request, Asset $asset): JsonResponse
     {
         $asset->update($request->validated());
-
+app(\App\Services\AuditService::class)->log('asset.updated', $asset);
         return response()->json($asset->load('category'));
     }
 

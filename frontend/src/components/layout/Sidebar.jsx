@@ -37,6 +37,7 @@ export default function Sidebar() {
     { to: '/damage-reports', label: 'Damage Reports', icon: ICONS.damage },
     { to: '/reports', label: 'Reports', icon: ICONS.reports },
     { to: '/users', label: 'Users', icon: ICONS.users },
+    { to: '/audit-logs', label: 'Audit Log', icon: ICONS.reports },
   ];
 
   const links = isAdmin ? adminLinks : employeeLinks;

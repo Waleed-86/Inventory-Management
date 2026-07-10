@@ -37,7 +37,10 @@ class AuthController extends Controller
         // Remove this line if you want to support multiple concurrent sessions.
         $user->tokens()->delete();
 
+
         $token = $user->createToken('auth-token')->plainTextToken;
+        
+        app(\App\Services\AuditService::class)->log('user.login');
 
         return response()->json([
             'user' => [

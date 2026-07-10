@@ -61,6 +61,7 @@ class RequestController extends Controller
             'admin_comment' => $request->input('admin_comment'),
         ]);
 
+        app(\App\Services\AuditService::class)->log('request.approved', $requisition);
         return response()->json($requisition->fresh(['asset', 'user']));
     }
 

@@ -9,6 +9,8 @@ import MyRequestsPage from './pages/requests/MyRequestsPage';
 import ManageRequestsPage from './pages/requests/ManageRequestsPage';
 import DamageReportsPage from './pages/damage-reports/DamageReportsPage';
 import ReportsPage from './pages/reports/ReportsPage';
+import AuditLogPage from './pages/audit-logs/AuditLogPage';
+import UsersListPage from './pages/users/UsersListPage';
 
 function LoginRoute() {
   const { login } = useAuth();
@@ -47,6 +49,14 @@ function AppRoutes() {
         }
       />
       <Route
+  path="/audit-logs"
+  element={
+    <ProtectedRoute>
+      <AuditLogPage />
+    </ProtectedRoute>
+  }
+/>
+      <Route
         path="/categories"
         element={
           <ProtectedRoute>
@@ -54,6 +64,14 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/users"
+  element={
+    <ProtectedRoute>
+      <UsersListPage />
+    </ProtectedRoute>
+  }
+/>
       <Route
         path="/my-requests"
         element={

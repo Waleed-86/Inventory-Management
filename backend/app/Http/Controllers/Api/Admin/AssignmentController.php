@@ -58,8 +58,10 @@ class AssignmentController extends Controller
                 'assigned_date' => $request->input('assigned_date'),
                 'notes' => $request->input('notes'),
                 'status' => 'active',
+                
             ]);
-
+            $assignment->user->notify(new \App\Notifications\AssetAssignedNotification($assignment));
+app(\App\Services\AuditService::class)->log('asset.assigned', $assignment->asset);
             $asset->update(['status' => 'assigned']);
 
             return $assignment;
