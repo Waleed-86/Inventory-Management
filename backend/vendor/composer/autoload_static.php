@@ -705,9 +705,12 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
     );
 
     public static $classMap = array (
+        'App\\Exports\\AssetsExport' => __DIR__ . '/../..' . '/app/Exports/AssetsExport.php',
         'App\\Http\\Controllers\\Api\\Admin\\AssetController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/AssetController.php',
         'App\\Http\\Controllers\\Api\\Admin\\AssignmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/AssignmentController.php',
         'App\\Http\\Controllers\\Api\\Admin\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/CategoryController.php',
+        'App\\Http\\Controllers\\Api\\Admin\\DepreciationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/DepreciationController.php',
+        'App\\Http\\Controllers\\Api\\Admin\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/ReportController.php',
         'App\\Http\\Controllers\\Api\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Admin/UserController.php',
         'App\\Http\\Controllers\\Api\\Auth\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/Auth/AuthController.php',
         'App\\Http\\Controllers\\Api\\DamageReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DamageReportController.php',
@@ -725,10 +728,12 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
         'App\\Models\\Asset' => __DIR__ . '/../..' . '/app/Models/Asset.php',
         'App\\Models\\AssetAssignment' => __DIR__ . '/../..' . '/app/Models/AssetAssignment.php',
         'App\\Models\\DamageReport' => __DIR__ . '/../..' . '/app/Models/DamageReport.php',
+        'App\\Models\\DepreciationRecord' => __DIR__ . '/../..' . '/app/Models/DepreciationRecord.php',
         'App\\Models\\Repair' => __DIR__ . '/../..' . '/app/Models/Repair.php',
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
+        'App\\Services\\DepreciationService' => __DIR__ . '/../..' . '/app/Services/DepreciationService.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\DomPDF\\Facade\\Pdf' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade/Pdf.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',

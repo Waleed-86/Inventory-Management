@@ -8,7 +8,7 @@ import CategoriesListPage from './pages/categories/CategoriesListPage';
 import MyRequestsPage from './pages/requests/MyRequestsPage';
 import ManageRequestsPage from './pages/requests/ManageRequestsPage';
 import DamageReportsPage from './pages/damage-reports/DamageReportsPage';
-
+import ReportsPage from './pages/reports/ReportsPage';
 
 function LoginRoute() {
   const { login } = useAuth();
@@ -62,6 +62,15 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      
+<Route
+  path="/reports"
+  element={
+    <ProtectedRoute>
+      <ReportsPage />
+    </ProtectedRoute>
+  }
+/>
       <Route
         path="/requests"
         element={
@@ -92,3 +101,7 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
+
+

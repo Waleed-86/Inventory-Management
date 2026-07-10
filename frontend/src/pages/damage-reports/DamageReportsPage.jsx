@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Sidebar from '../../components/layout/Sidebar';
-import { fetchDamageReports, createDamageReport } from '../../api/endpoints/damageReports';
+import { useAuth } from '../../context/AuthContext';
+import { fetchDamageReports, createDamageReport, updateDamageReportStatus } from '../../api/endpoints/damageReports';
 import { fetchAssets } from '../../api/endpoints/assets';
 
 const STATUS_STYLES = {
@@ -9,6 +10,17 @@ const STATUS_STYLES = {
   repaired: 'bg-[#E7F3EC] text-[#2F7A54]',
   replaced: 'bg-[#EDEEF0] text-[#5B6472]',
   scrapped: 'bg-[#FBEDE6] text-[#B23B1E]',
+};
+
+// Only these transitions are allowed from each current status —
+// mirrors the backend's lifecycle (pending_review -> in_repair -> repaired/replaced/scrapped).
+const NEXT_ACTIONS = {
+  pending_review: [{ status: 'in_repair', label: 'Send to Repair' }],
+  in_repair: [
+    { status: 'repaired', label: 'Mark Repaired' },
+    { status: 'replaced', label: 'Mark Replaced' },
+    { status: 'scrapped', label: 'Scrap Asset' },
+  ],
 };
 
 function StatusBadge({ status }) {
@@ -20,10 +32,14 @@ function StatusBadge({ status }) {
 }
 
 export default function DamageReportsPage() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'super-admin' || user?.role === 'inventory-manager';
+
   const [reports, setReports] = useState([]);
   const [assets, setAssets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actioningId, setActioningId] = useState(null);
 
   const [showForm, setShowForm] = useState(false);
   const [assetId, setAssetId] = useState('');
@@ -48,7 +64,6 @@ export default function DamageReportsPage() {
 
   useEffect(() => {
     loadReports();
-    // Only assets that are currently assigned/available make sense to report damage on.
     fetchAssets({ per_page: 100 })
       .then((res) => setAssets(res.data.data))
       .catch(() => {});
@@ -79,12 +94,24 @@ export default function DamageReportsPage() {
     }
   }
 
+  async function handleStatusChange(report, newStatus) {
+    setActioningId(report.id);
+    try {
+      await updateDamageReportStatus(report.id, newStatus);
+      loadReports();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Could not update this report.');
+    } finally {
+      setActioningId(null);
+    }
+  }
+
   return (
     <div className="flex min-h-screen bg-[#EDEEF0]">
       <Sidebar />
 
       <main className="flex-1 px-8 py-8 md:px-12">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs tracking-[0.1em] text-[#8891A3] uppercase">Assets</p>
@@ -180,20 +207,37 @@ export default function DamageReportsPage() {
                 <thead>
                   <tr className="text-left text-[#5B6472] border-b border-[#E2E4E8]">
                     <th className="px-5 py-3 font-medium">Asset</th>
+                    {isAdmin && <th className="px-5 py-3 font-medium">Reported By</th>}
                     <th className="px-5 py-3 font-medium">Description</th>
                     <th className="px-5 py-3 font-medium">Status</th>
                     <th className="px-5 py-3 font-medium">Reported</th>
+                    {isAdmin && <th className="px-5 py-3 font-medium"></th>}
                   </tr>
                 </thead>
                 <tbody>
                   {reports.map((r) => (
                     <tr key={r.id} className="border-b border-[#E2E4E8] last:border-0">
                       <td className="px-5 py-3 text-[#10182B]">{r.asset?.name}</td>
+                      {isAdmin && <td className="px-5 py-3 text-[#5B6472]">{r.user?.name}</td>}
                       <td className="px-5 py-3 text-[#5B6472] max-w-xs truncate">{r.description}</td>
                       <td className="px-5 py-3"><StatusBadge status={r.status} /></td>
                       <td className="px-5 py-3 text-[#5B6472]">
                         {new Date(r.created_at).toLocaleDateString()}
                       </td>
+                      {isAdmin && (
+                        <td className="px-5 py-3 text-right space-x-3 whitespace-nowrap">
+                          {(NEXT_ACTIONS[r.status] || []).map((action) => (
+                            <button
+                              key={action.status}
+                              disabled={actioningId === r.id}
+                              onClick={() => handleStatusChange(r, action.status)}
+                              className="text-[#3457A6] hover:underline text-sm disabled:opacity-50"
+                            >
+                              {action.label}
+                            </button>
+                          ))}
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

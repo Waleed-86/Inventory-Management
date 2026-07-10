@@ -6,9 +6,12 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Exports\\AssetsExport' => $baseDir . '/app/Exports/AssetsExport.php',
     'App\\Http\\Controllers\\Api\\Admin\\AssetController' => $baseDir . '/app/Http/Controllers/Api/Admin/AssetController.php',
     'App\\Http\\Controllers\\Api\\Admin\\AssignmentController' => $baseDir . '/app/Http/Controllers/Api/Admin/AssignmentController.php',
     'App\\Http\\Controllers\\Api\\Admin\\CategoryController' => $baseDir . '/app/Http/Controllers/Api/Admin/CategoryController.php',
+    'App\\Http\\Controllers\\Api\\Admin\\DepreciationController' => $baseDir . '/app/Http/Controllers/Api/Admin/DepreciationController.php',
+    'App\\Http\\Controllers\\Api\\Admin\\ReportController' => $baseDir . '/app/Http/Controllers/Api/Admin/ReportController.php',
     'App\\Http\\Controllers\\Api\\Admin\\UserController' => $baseDir . '/app/Http/Controllers/Api/Admin/UserController.php',
     'App\\Http\\Controllers\\Api\\Auth\\AuthController' => $baseDir . '/app/Http/Controllers/Api/Auth/AuthController.php',
     'App\\Http\\Controllers\\Api\\DamageReportController' => $baseDir . '/app/Http/Controllers/Api/DamageReportController.php',
@@ -26,10 +29,12 @@ return array(
     'App\\Models\\Asset' => $baseDir . '/app/Models/Asset.php',
     'App\\Models\\AssetAssignment' => $baseDir . '/app/Models/AssetAssignment.php',
     'App\\Models\\DamageReport' => $baseDir . '/app/Models/DamageReport.php',
+    'App\\Models\\DepreciationRecord' => $baseDir . '/app/Models/DepreciationRecord.php',
     'App\\Models\\Repair' => $baseDir . '/app/Models/Repair.php',
     'App\\Models\\Role' => $baseDir . '/app/Models/Role.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
+    'App\\Services\\DepreciationService' => $baseDir . '/app/Services/DepreciationService.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Barryvdh\\DomPDF\\Facade\\Pdf' => $vendorDir . '/barryvdh/laravel-dompdf/src/Facade/Pdf.php',
     'Barryvdh\\DomPDF\\PDF' => $vendorDir . '/barryvdh/laravel-dompdf/src/PDF.php',
