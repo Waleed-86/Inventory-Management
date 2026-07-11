@@ -9,9 +9,10 @@ import MyRequestsPage from './pages/requests/MyRequestsPage';
 import ManageRequestsPage from './pages/requests/ManageRequestsPage';
 import DamageReportsPage from './pages/damage-reports/DamageReportsPage';
 import ReportsPage from './pages/reports/ReportsPage';
-import AuditLogPage from './pages/audit-logs/AuditLogPage';
 import UsersListPage from './pages/users/UsersListPage';
+import AuditLogPage from './pages/audit-logs/AuditLogPage';
 
+// Wraps LoginPage so it can update AuthContext and redirect on success.
 function LoginRoute() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -19,8 +20,6 @@ function LoginRoute() {
   return (
     <LoginPage
       onLoginSuccess={(user) => {
-        // LoginPage already stored the token in localStorage before calling
-        // this callback, so we just need to sync it into AuthContext state.
         login(user, localStorage.getItem('auth_token'));
         navigate('/dashboard');
       }}
@@ -32,79 +31,20 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginRoute />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/assets"
-        element={
-          <ProtectedRoute>
-            <AssetsListPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-  path="/audit-logs"
-  element={
-    <ProtectedRoute>
-      <AuditLogPage />
-    </ProtectedRoute>
-  }
-/>
-      <Route
-        path="/categories"
-        element={
-          <ProtectedRoute>
-            <CategoriesListPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-  path="/users"
-  element={
-    <ProtectedRoute>
-      <UsersListPage />
-    </ProtectedRoute>
-  }
-/>
-      <Route
-        path="/my-requests"
-        element={
-          <ProtectedRoute>
-            <MyRequestsPage />
-          </ProtectedRoute>
-        }
-      />
-      
-<Route
-  path="/reports"
-  element={
-    <ProtectedRoute>
-      <ReportsPage />
-    </ProtectedRoute>
-  }
-/>
-      <Route
-        path="/requests"
-        element={
-          <ProtectedRoute>
-            <ManageRequestsPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-  path="/damage-reports"
-  element={
-    <ProtectedRoute>
-      <DamageReportsPage />
-    </ProtectedRoute>
-  }
-/>
+
+      {/* Accessible to any authenticated user (admin or employee) */}
+      <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+      <Route path="/my-requests" element={<ProtectedRoute><MyRequestsPage /></ProtectedRoute>} />
+      <Route path="/damage-reports" element={<ProtectedRoute><DamageReportsPage /></ProtectedRoute>} />
+
+      {/* Admin-only — Super Admin or Inventory Manager */}
+      <Route path="/assets" element={<ProtectedRoute adminOnly><AssetsListPage /></ProtectedRoute>} />
+      <Route path="/categories" element={<ProtectedRoute adminOnly><CategoriesListPage /></ProtectedRoute>} />
+      <Route path="/requests" element={<ProtectedRoute adminOnly><ManageRequestsPage /></ProtectedRoute>} />
+      <Route path="/reports" element={<ProtectedRoute adminOnly><ReportsPage /></ProtectedRoute>} />
+      <Route path="/users" element={<ProtectedRoute adminOnly><UsersListPage /></ProtectedRoute>} />
+      <Route path="/audit-logs" element={<ProtectedRoute adminOnly><AuditLogPage /></ProtectedRoute>} />
+
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
@@ -119,7 +59,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
-
-
-

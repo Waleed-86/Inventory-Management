@@ -1,23 +1,23 @@
 import axiosClient from '../axiosClient';
 
 export function fetchAssets(params = {}) {
-  return axiosClient.get('/assets', { params });
+  return axiosClient.get('/admin/assets', { params });
 }
 
 export function fetchAsset(id) {
-  return axiosClient.get(`/assets/${id}`);
+  return axiosClient.get(`/admin/assets/${id}`);
 }
 
 export function createAsset(data) {
-  return axiosClient.post('/assets', data);
+  return axiosClient.post('/admin/assets', data);
 }
 
 export function updateAsset(id, data) {
-  return axiosClient.put(`/assets/${id}`, data);
+  return axiosClient.put(`/admin/assets/${id}`, data);
 }
 
 export function deleteAsset(id) {
-  return axiosClient.delete(`/assets/${id}`);
+  return axiosClient.delete(`/admin/assets/${id}`);
 }
 
 export function fetchCategories() {
